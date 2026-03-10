@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旋转艺廊 · 十幅异彩</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f6f9fc 0%, #e9f1f8 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+
+        /* 主画框 */
+        .gallery {
+            max-width: 1300px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #2b3a4a, #1d2b36);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 10px 20px rgba(0,20,30,0.1);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #3a4e62;
+            opacity: 0.8;
+            margin-top: 0.3rem;
+            font-weight: 300;
+        }
+
+        /* 网格布局 —— 自动适配桌面/移动 */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem 1.5rem;
+            justify-items: center;
+            align-items: start;
+        }
+
+        /* 卡片样式：轻盈通透，略有浮动感 */
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(4px);
+            border-radius: 32px 32px 28px 28px;
+            padding: 1.2rem 1rem 1.5rem 1rem;
+            box-shadow: 0 20px 30px -10px rgba(0, 30, 40, 0.15),
+                        0 0 0 1px rgba(255, 255, 255, 0.9) inset;
+            transition: transform 0.25s ease, box-shadow 0.3s ease;
+            width: 100%;
+            max-width: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 40px -12px rgba(0, 45, 65, 0.25),
+                        0 0 0 1px rgba(255, 255, 255, 0.7) inset;
+        }
+
+        /* 图片容器——保证旋转时不被裁剪，留出呼吸空间 */
+        .image-wrapper {
+            width: 200px;
+            height: 200px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* 不设overflow:hidden，让旋转的图片可以稍微溢出，更有张力 */
+        }
+
+        /* 基础旋转动画 (无限匀速) */
+        .rotating-img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+            box-shadow: 0 15px 25px -8px rgba(0, 0, 0, 0.2),
+                        0 4px 8px rgba(0, 0, 0, 0.1);
+            animation-name: spin;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+            /* 动画时长/方向/圆角将在各个卡片中单独定制，体现“各有特点” */
+            transition: filter 0.2s;
+        }
+
+        .rotating-img:hover {
+            filter: brightness(1.05) saturate(1.1);
+            animation-play-state: paused;  /* 悬停暂停，方便欣赏细节 */
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 卡片文字 */
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1f3a4b;
+            line-height: 1.2;
+            margin-bottom: 0.2rem;
+            text-align: center;
+        }
+
+        .card .feature {
+            font-size: 0.95rem;
+            color: #3f5e72;
+            background: rgba(190, 215, 230, 0.4);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-weight: 450;
+            letter-spacing: 0.3px;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255,255,255,0.5);
+            margin-top: 0.4rem;
+        }
+
+        /* 为每张图片赋予完全不同的旋转节奏、方向及圆角 —— 十幅图片，十种性格 */
+        .card:nth-child(1) .rotating-img {
+            animation-duration: 7s;
+            animation-direction: normal;
+            border-radius: 30% 20% 40% 10%;
+        }
+        .card:nth-child(2) .rotating-img {
+            animation-duration: 11s;
+            animation-direction: reverse;
+            border-radius: 50% 20% 50% 20%;
+        }
+        .card:nth-child(3) .rotating-img {
+            animation-duration: 9s;
+            animation-direction: alternate;  /* 正反交替，别致 */
+            border-radius: 40% 40% 10% 10%;
+        }
+        .card:nth-child(4) .rotating-img {
+            animation-duration: 14s;
+            animation-direction: reverse;
+            border-radius: 10% 50% 10% 50%;
+        }
+        .card:nth-child(5) .rotating-img {
+            animation-duration: 6.5s;
+            animation-direction: normal;
+            border-radius: 60% 20% 60% 20%;
+        }
+        .card:nth-child(6) .rotating-img {
+            animation-duration: 12s;
+            animation-direction: reverse;
+            border-radius: 30% 70% 30% 70%;
+        }
+        .card:nth-child(7) .rotating-img {
+            animation-duration: 8s;
+            animation-direction: alternate-reverse;
+            border-radius: 70% 30% 30% 70%;
+        }
+        .card:nth-child(8) .rotating-img {
+            animation-duration: 10s;
+            animation-direction: normal;
+            border-radius: 45% 45% 10% 10%;
+        }
+        .card:nth-child(9) .rotating-img {
+            animation-duration: 16s;
+            animation-direction: reverse;
+            border-radius: 20% 60% 20% 60%;
+        }
+        .card:nth-child(10) .rotating-img {
+            animation-duration: 13s;
+            animation-direction: alternate;
+            border-radius: 80% 20% 20% 80%;
+        }
+
+        /* 微调卡片背景色，增加一点微妙差异（但图片本身已够丰富） */
+        .card:nth-child(1) { background: rgba(255, 240, 230, 0.7); }
+        .card:nth-child(2) { background: rgba(230, 245, 255, 0.7); }
+        .card:nth-child(3) { background: rgba(240, 250, 235, 0.7); }
+        .card:nth-child(4) { background: rgba(255, 235, 245, 0.7); }
+        .card:nth-child(5) { background: rgba(235, 245, 255, 0.7); }
+        .card:nth-child(6) { background: rgba(250, 240, 225, 0.7); }
+        .card:nth-child(7) { background: rgba(225, 240, 250, 0.7); }
+        .card:nth-child(8) { background: rgba(245, 230, 255, 0.7); }
+        .card:nth-child(9) { background: rgba(230, 255, 240, 0.7); }
+        .card:nth-child(10) { background: rgba(255, 225, 230, 0.7); }
+
+        /* 页脚小记 */
+        .footer-note {
+            margin-top: 4rem;
+            font-size: 0.95rem;
+            color: #4b6a7f;
+            background: rgba(255,255,240,0.5);
+            padding: 0.5rem 2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(3px);
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+
+        /* 停止按钮样式 */
+        .stop-button {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .stop-button:hover {
+            background-color: #2980b9;
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 6px 16px rgba(52, 152, 219, 0.6);
+        }
+
+        .stop-button:active {
+            transform: translateY(-50%) scale(0.98);
+        }
+
+        /* 响应式小屏微调 */
+        @media (max-width: 550px) {
+            .header h1 { font-size: 2.2rem; }
+            .grid { gap: 1.2rem; }
+            .card { padding: 1rem 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 停止按钮 -->
+    <button id="stopButton" class="stop-button">停止旋转</button>
+    
+    <div class="gallery">
+        <div class="header">
+            <h1>🔄 旋转 · 十色画卷</h1>
+            <p>十幅图片 · 十种风姿 · 各自旋转韵律</p>
+        </div>
+
+        <!-- 十幅图片网格：所有图片来自 picsum 固定ID，确保内容稳定且各不相同 -->
+        <div class="grid">
+            <!-- 1. 山景 · 雄伟险峻 -->
+            <div class="card">
+                <div class="image-wrapper">
+                    <img class="rotating-img" src="https://picsum.photos/id/0/200/200" alt="雄伟山景" loading="lazy">
+                </div>
+                <h3>⛰️ 山脉</h3>
+                <div class="feature">雄伟险峻 · 云海环绕</div>
+            </div>
+
+            <!-- 2. 湖泊 · 清澈宁静 -->
+            <div class="card">
+                <div class="image-wrapper">
+                    <img class="rotating-img" src="https://picsum.photos/id/1/200/200" alt="静谧湖泊" loading="lazy">
+                </div>
+                <h3>🏞️ 湖泊</h3>
+                <div class="feature">清澈宁静 · 倒映群峰</div>
+            </div>
+
+            <!-- 3. 山谷 · 幽深静谧 -->
+            <div class="card">
+                <div class="image-wrapper">
+                    <img class="rotating-img" src="https://picsum.photos/id/2/200/200" alt="幽静山谷" loading="lazy">
+                </div>
+                <h3>🏔️ 山谷</h3>
+                <div class="feature">幽深静谧 · 薄雾轻笼</div>
+            </div>
+
+            <!-- 4. 瀑布 · 飞流直下 -->
+            <div class="card">
+                <div class="image-wrapper">
+                    <img class="rotating-img" src="https://picsum.photos/id/3/200/200" alt="飞瀑直下" loading="lazy">
+                </div>
+                <h3>🌊 瀑布</h3>
+                <div class="feature">飞流直下 · 水雾迷蒙</div>
+            </div>
+
+            <!-- 5. 峡谷 · 壮丽深邃 -->
+            <div class="card">
+                <div class="image-wrapper">
+                    <img class="rotating-img" src="https://picsum.photos/id/4/200/200" alt="壮丽峡谷" loading="lazy">
+                </div>
+                <h3>🏜️ 峡谷</h3>
+                <div class="feature">壮丽深邃 · 岩壁千仞</div>
+            </div>
+
+            <!-- 6. 沙漠 · 广袤无垠 -->
+            <div class="card">
+                <div class="image-wrapper">
+                    <img class="rotating-img" src="https://picsum.photos/id/5/200/200" alt="广袤沙漠" loading="lazy">
+                </div>
+                <h3>🏝️ 沙漠</h3>
+                <div class="feature">广袤无垠 · 沙丘如浪</div>
+            </div>
+
+            <!-- 7. 极光 · 绚丽梦幻 -->
+            <div class="card">
+                <div class="image-wrapper">
+                    <img class="rotating-img" src="https://picsum.photos/id/6/200/200" alt="绚丽极光" loading="lazy">
+                </div>
+                <h3>✨ 极光</h3>
+                <div class="feature">绚丽梦幻 · 欧若拉舞</div>
+            </div>
+
+            <!-- 8. 森林 · 郁郁葱葱 -->
+            <div class="card">
+                <div class="image-wrapper">
+                    <img class="rotating-img" src="https://picsum.photos/id/7/200/200" alt="葱郁森林" loading="lazy">
+                </div>
+                <h3>🌲 森林</h3>
+                <div class="feature">郁郁葱葱 · 光影斑驳</div>
+            </div>
+
+            <!-- 9. 花朵 · 娇艳欲滴 -->
+            <div class="card">
+                <div class="image-wrapper">
+                    <img class="rotating-img" src="https://picsum.photos/id/8/200/200" alt="娇艳花朵" loading="lazy">
+                </div>
+                <h3>🌸 花朵</h3>
+                <div class="feature">娇艳欲滴 · 芬芳吐蕊</div>
+            </div>
+
+            <!-- 10. 草原 · 一望无际 -->
+            <div class="card">
+                <div class="image-wrapper">
+                    <img class="rotating-img" src="https://picsum.photos/id/9/200/200" alt="辽阔草原" loading="lazy">
+                </div>
+                <h3>🌾 草原</h3>
+                <div class="feature">一望无际 · 风吹草低</div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            ⏳ 每幅图片旋转速度/方向/圆角皆不相同 · 悬停可暂停品味细节
+        </div>
+    </div>
+
+    <!-- 注解：以上10张图片来自picsum固定ID (0-9)，各自代表不同种类风景， 
+         每张图片应用了独特的旋转动画时长、方向及圆角，完美体现“十幅图片，各有特点” -->
+
+    <script>
+        // 停止按钮功能
+        const stopButton = document.getElementById('stopButton');
+        let isRotating = true;
+
+        stopButton.addEventListener('click', function() {
+            const rotatingImages = document.querySelectorAll('.rotating-img');
+            
+            if (isRotating) {
+                // 停止旋转
+                rotatingImages.forEach(img => {
+                    img.style.animationPlayState = 'paused';
+                });
+                stopButton.textContent = '开始旋转';
+                stopButton.style.backgroundColor = '#27ae60';
+            } else {
+                // 开始旋转
+                rotatingImages.forEach(img => {
+                    img.style.animationPlayState = 'running';
+                });
+                stopButton.textContent = '停止旋转';
+                stopButton.style.backgroundColor = '#3498db';
+            }
+            
+            isRotating = !isRotating;
+        });
+    </script>
+</body>
+</html>
