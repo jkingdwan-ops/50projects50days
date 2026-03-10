@@ -1,7 +1,19 @@
 const boxesContainer = document.getElementById('boxes')
 const btn = document.getElementById('btn')
 
-btn.addEventListener('click', () => boxesContainer.classList.toggle('big'))
+let currentScene = 1
+const totalScenes = 3
+
+// 场景切换
+btn.addEventListener('click', () => {
+  boxesContainer.classList.toggle('big')
+  
+  // 切换场景
+  setTimeout(() => {
+    currentScene = currentScene % totalScenes + 1
+    updateScene()
+  }, 200)
+})
 
 function createBoxes() {
   for (let i = 0; i < 4; i++) {
@@ -11,6 +23,43 @@ function createBoxes() {
       box.style.backgroundPosition = `${-j * 125}px ${-i * 125}px`
       boxesContainer.appendChild(box)
     }
+  }
+}
+
+// 更新场景
+function updateScene() {
+  const boxes = document.querySelectorAll('.box')
+  const body = document.body
+  
+  // 移除所有花瓣
+  document.querySelectorAll('.petal').forEach(petal => petal.remove())
+  
+  switch(currentScene) {
+    case 1:
+      // 原始场景
+      body.style.backgroundColor = '#3498db'
+      boxes.forEach(box => {
+        box.style.backgroundImage = "url('https://media.giphy.com/media/EZqwsBSPlvSda/giphy.gif')"
+        box.style.backgroundSize = '500px 500px'
+      })
+      createPetals()
+      break
+    case 2:
+      // 第二个场景
+      body.style.backgroundColor = '#2c3e50'
+      boxes.forEach(box => {
+        box.style.backgroundImage = "url('https://picsum.photos/id/1015/500/500')"
+        box.style.backgroundSize = '500px 500px'
+      })
+      break
+    case 3:
+      // 教堂背景场景
+      body.style.backgroundColor = '#1a1a1a'
+      boxes.forEach(box => {
+        box.style.backgroundImage = "url('https://picsum.photos/id/1040/500/500')"
+        box.style.backgroundSize = '500px 500px'
+      })
+      break
   }
 }
 
