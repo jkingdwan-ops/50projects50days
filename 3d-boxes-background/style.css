@@ -6,7 +6,7 @@
 }
 
 body {
-  background-color: #fafafa;
+  background-color: #3498db;
   font-family: 'Roboto', sans-serif;
   display: flex;
   flex-direction: column;
@@ -68,6 +68,8 @@ body {
   height: 125px;
   width: 125px;
   transition: 0.4s ease;
+  border: 2px solid #333;
+  box-sizing: border-box;
 }
 
 .box::after {
