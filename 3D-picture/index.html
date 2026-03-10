@@ -219,33 +219,33 @@
             border: 1px solid rgba(255,255,255,0.7);
         }
 
-        /* 停止按钮样式 */
-        .stop-button {
-            position: fixed;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
+        /* 旋转按钮样式 */
+        .rotate-button {
+            display: inline-block;
             background-color: #3498db;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 8px 16px;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 20px;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
             transition: all 0.3s ease;
-            z-index: 1000;
+            margin-right: 10px;
         }
 
-        .stop-button:hover {
+        .rotate-button:hover {
             background-color: #2980b9;
-            transform: translateY(-50%) scale(1.05);
+            transform: scale(1.1);
             box-shadow: 0 6px 16px rgba(52, 152, 219, 0.6);
         }
 
-        .stop-button:active {
-            transform: translateY(-50%) scale(0.98);
+        .rotate-button:active {
+            transform: scale(0.95);
+        }
+
+        .rotate-button.paused {
+            background-color: #27ae60;
         }
 
         /* 响应式小屏微调 */
@@ -257,12 +257,9 @@
     </style>
 </head>
 <body>
-    <!-- 停止按钮 -->
-    <button id="stopButton" class="stop-button">停止旋转</button>
-    
     <div class="gallery">
         <div class="header">
-            <h1>🔄 旋转 · 十色画卷</h1>
+            <h1><span id="rotateButton" class="rotate-button">🔄</span> 旋转 · 十色画卷</h1>
             <p>十幅图片 · 十种风姿 · 各自旋转韵律</p>
         </div>
 
@@ -368,11 +365,11 @@
          每张图片应用了独特的旋转动画时长、方向及圆角，完美体现“十幅图片，各有特点” -->
 
     <script>
-        // 停止按钮功能
-        const stopButton = document.getElementById('stopButton');
+        // 旋转按钮功能
+        const rotateButton = document.getElementById('rotateButton');
         let isRotating = true;
 
-        stopButton.addEventListener('click', function() {
+        rotateButton.addEventListener('click', function() {
             const rotatingImages = document.querySelectorAll('.rotating-img');
             
             if (isRotating) {
@@ -380,15 +377,13 @@
                 rotatingImages.forEach(img => {
                     img.style.animationPlayState = 'paused';
                 });
-                stopButton.textContent = '开始旋转';
-                stopButton.style.backgroundColor = '#27ae60';
+                rotateButton.classList.add('paused');
             } else {
                 // 开始旋转
                 rotatingImages.forEach(img => {
                     img.style.animationPlayState = 'running';
                 });
-                stopButton.textContent = '停止旋转';
-                stopButton.style.backgroundColor = '#3498db';
+                rotateButton.classList.remove('paused');
             }
             
             isRotating = !isRotating;
