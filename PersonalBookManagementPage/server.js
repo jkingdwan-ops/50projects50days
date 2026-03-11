@@ -53,10 +53,24 @@ app.delete('/books/:id', (req, res) => {
     res.json({ message: '删除成功' });
 });
 
+// GET / - 根路径，用于测试服务状态
+app.get('/', (req, res) => {
+    res.json({
+        message: '图书管理API服务已启动',
+        version: '1.0.0',
+        endpoints: {
+            books: '/books',
+            addBook: 'POST /books',
+            deleteBook: 'DELETE /books/:id'
+        }
+    });
+});
+
 // 启动服务器
 app.listen(PORT, () => {
     console.log(`图书管理API服务已启动，访问地址：http://localhost:${PORT}`);
     console.log(`API接口：`);
+    console.log(`  GET  http://localhost:${PORT}/ - 服务状态`);
     console.log(`  GET  http://localhost:${PORT}/books - 获取图书列表`);
     console.log(`  POST http://localhost:${PORT}/books - 添加图书`);
     console.log(`  DELETE http://localhost:${PORT}/books/:id - 删除图书`);
