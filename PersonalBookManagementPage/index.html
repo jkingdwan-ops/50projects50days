@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:3000/books';const API_URL = 'http://localhost:3000/books';const API_URL = 'https://your-render-service-url/books';<!DOCTYPE html>
+// 本地测试服务URL
+const API_URL = 'https://book-management-api-o530.onrender.com/books';<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +8,7 @@ const API_URL = 'http://localhost:3000/books';const API_URL = 'http://localhost:
     <style>
         * {
             margin: 0;
-            padding: 0;const API_URL = 'https://your-render-service-url/books';
+            padding: 0;
             box-sizing: border-box;
         }
         
@@ -158,8 +159,8 @@ const API_URL = 'http://localhost:3000/books';const API_URL = 'http://localhost:
     </div>
     
     <script>
-        // Render服务URL
-        const API_URL = 'https://book-management-api-o530.onrender.com/books';
+        // 本地测试服务URL
+        const API_URL = 'http://localhost:3000/books';
         
         const titleInput = document.getElementById('titleInput');
         const authorInput = document.getElementById('authorInput');
@@ -169,12 +170,18 @@ const API_URL = 'http://localhost:3000/books';const API_URL = 'http://localhost:
         // 加载图书列表
         async function loadBooks() {
             try {
+                console.log('正在请求图书列表:', API_URL);
                 const response = await fetch(API_URL);
+                console.log('响应状态:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const books = await response.json();
+                console.log('获取到的图书数据:', books);
                 displayBooks(books);
             } catch (error) {
                 console.error('加载图书失败:', error);
-                bookList.innerHTML = '<div class="empty-message">加载失败，请确保后端服务已启动</div>';
+                bookList.innerHTML = `<div class="empty-message">加载失败: ${error.message}</div>`;
             }
         }
         
